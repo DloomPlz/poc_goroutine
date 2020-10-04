@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"poc/core"
 
 	"github.com/spf13/cobra"
 )
@@ -13,6 +14,7 @@ var testCmd = &cobra.Command{
 	Long:  `test`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("test called")
+		core.Test()
 	},
 }
 
