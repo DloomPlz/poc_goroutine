@@ -3,18 +3,26 @@ package core
 import (
 	"context"
 	"fmt"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 	"time"
 )
 
-func Test() {
+func Test(ctx context.Context) {
 	wg := new(sync.WaitGroup)
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	fmt.Println("core.Test")
+	c := make(chan os.Signal)
 	for i := 1; i <= 10; i++ {
 		wg.Add(1)
 		go func(ctx context.Context, i int) {
 			defer wg.Done()
+			signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+			go func() {
+				<-c
+				ctx.Done()
+			}()
 			select {
 			case <-ctx.Done():
 				fmt.Println("Done:", ctx.Err())
@@ -26,5 +34,4 @@ func Test() {
 		}(ctx, i)
 	}
 	wg.Wait()
-	cancel()
 }

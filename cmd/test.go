@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"poc/core"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -14,7 +16,9 @@ var testCmd = &cobra.Command{
 	Long:  `test`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("test called")
-		core.Test()
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		core.Test(ctx)
 	},
 }
 
