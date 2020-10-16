@@ -3,8 +3,9 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"os"
+	"os/signal"
 	"poc/core"
-	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -16,8 +17,21 @@ var testCmd = &cobra.Command{
 	Long:  `test`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("test called")
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		defer cancel()
+		ctx := context.Background()
+		ctx, cancel := context.WithCancel(ctx)
+		c := make(chan os.Signal, 1)
+		signal.Notify(c, os.Interrupt)
+		defer func() {
+			signal.Stop(c)
+			cancel()
+		}()
+		go func() {
+			select {
+			case <-c:
+				cancel()
+			case <-ctx.Done():
+			}
+		}()
 		core.Test(ctx)
 	},
 }
