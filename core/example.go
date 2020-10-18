@@ -9,10 +9,10 @@ import (
 	"time"
 )
 
-// Test is test
-func Test(ctx context.Context) error {
+// Example is Example
+func Example(ctx context.Context) error {
 	wg := new(sync.WaitGroup)
-	fmt.Println("core.Test")
+	fmt.Println("core.Example")
 
 	for i := 1; i <= 10; i++ {
 		wg.Add(1)
@@ -30,16 +30,3 @@ func Test(ctx context.Context) error {
 	wg.Wait()
 	return nil
 }
-
-// wg := new(sync.WaitGroup)
-// fmt.Println("core.Test")
-
-// for i := 1; i <= 10; i++ {
-// 	wg.Add(1)
-// 	go func(done chan bool, i int) {
-// 		defer wg.Done()
-// 		time.Sleep(1 * time.Second)
-// 		fmt.Printf("goroutine running : %d \n", i)
-// 	}(done, i)
-// }
-// wg.Wait()
