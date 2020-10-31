@@ -11,14 +11,14 @@ var exampleCmd = &cobra.Command{
 	Use:   "example",
 	Short: "example",
 	Long:  `example`,
-	RunE:  run,
+	RunE:  runExample,
 }
 
 func init() {
 	rootCmd.AddCommand(exampleCmd)
 }
 
-func run(cmd *cobra.Command, args []string) error {
+func runExample(cmd *cobra.Command, args []string) error {
 	fmt.Println("example command called")
 	return core.Example(cmd.Context())
 }
