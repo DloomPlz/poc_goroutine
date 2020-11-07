@@ -29,6 +29,8 @@ func Limiter(ctx context.Context) error {
 					if !ok { // no more jobs
 						return
 					}
+					// if an error occurs while handling this job,
+					// dont return, just break
 					time.Sleep(2 * time.Second)
 					log.Println(i, " : ", url)
 				}
